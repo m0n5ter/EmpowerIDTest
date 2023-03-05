@@ -2,9 +2,10 @@
 
 public class PagedList<T> : List<T>
 {
-    public PagedList(IList<T> list, int fullCount, int pageSize, int pageNumber) : base(list)
+    public PagedList(IList<T> list, int fullCount, int filteredCount, int pageSize, int pageNumber) : base(list)
     {
         FullCount = fullCount;
+        FilteredCount = filteredCount;
         PageSize = pageSize;
         PageNumber = pageNumber;
         PageCount = fullCount / pageSize + (fullCount % pageSize > 0 ? 1 : 0);
@@ -17,4 +18,6 @@ public class PagedList<T> : List<T>
     public int PageCount { get; }
 
     public int FullCount { get; }
+
+    public int FilteredCount { get; }
 }

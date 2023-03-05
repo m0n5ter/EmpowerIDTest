@@ -1,33 +1,37 @@
 ﻿using System;
 using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.Input;
+using EmpowerIDTest.Client.ViewModels.Dialogs;
 
 namespace EmpowerIDTest.Client.ViewModels;
 
 internal partial class MainViewModel : ViewModelBase
 {
+    private DialogViewModelBase? _dialog;
+
     public EmployeeListViewModel EmployeeList => App.GetService<EmployeeListViewModel>();
 
-    private Exception? _error;
-
-    public Exception? Error
+    public DialogViewModelBase? Dialog
     {
-        get => _error;
-        set => SetProperty(ref _error, value);
+        get => _dialog;
+        private set => SetProperty(ref _dialog, value);
     }
 
-    [RelayCommand]
-    private void ClearError() => Error = null;
+    public async Task<bool> ShowDialog(DialogViewModelBase dialog)
+    {
+        Dialog = dialog;
+
+        try
+        {
+            return await dialog.WaitAsync();
+        }
+        finally
+        {
+            Dialog = null;
+        }
+    }
 
     public async Task Initialize()
     {
-        try
-        {
-            await EmployeeList.Initialize();
-        }
-        catch (Exception exception)
-        {
-            Error = exception;
-        }
+        await EmployeeList.Initialize();
     }
 }

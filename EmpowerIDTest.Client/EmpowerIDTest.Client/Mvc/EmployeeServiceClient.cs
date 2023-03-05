@@ -40,12 +40,19 @@ internal class EmployeeServiceClient : ServiceClientBase
         var jObject = JObject.Parse(await response.Content.ReadAsStringAsync());
 
         return new PagedList<Employee>(jObject["result"]?.ToObject<List<Employee>>() ?? new List<Employee>(),
-            jObject["fullCount"]?.Value<int>() ?? throw new Exception("No count"), 50, 1);
+            jObject["fullCount"]?.Value<int>() ?? throw new Exception("No fullCount"),
+            jObject["filteredCount"]?.Value<int>() ?? throw new Exception("No filteredCount"),
+            request?.PageSize ?? 50, request?.PageNumber ?? 1);
     }
 
     public async Task Delete(Employee employee)
     {
         await _httpClient!.DeleteAsync($"Employee/{employee.Id}");
+    }
+
+    public async Task Create(Employee employee)
+    {
+        await _httpClient!.PostAsync("Employee", JsonContent.Create(employee));
     }
 
     //public async Task Update(UserViewModel user)

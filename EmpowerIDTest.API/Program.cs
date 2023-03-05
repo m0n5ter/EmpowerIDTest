@@ -51,7 +51,8 @@ public class Program
                     Name = name,
                     Password = Random.Shared.Next(111111, 999999).ToString(),
                     Email = $"{name}@universe.com",
-                    Phone = $"(555){Random.Shared.Next(1111111, 9999999)}"
+                    DOB = DateTime.Today.AddDays(-Random.Shared.Next(7000, 10000)),
+                    Phone = $"({Random.Shared.Next(500,599)}) {Random.Shared.Next(1111111, 9999999)}"
                 };
             }));
 

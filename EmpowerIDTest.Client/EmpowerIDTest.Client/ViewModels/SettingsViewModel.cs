@@ -75,7 +75,7 @@ internal class SettingsViewModel : ViewModelBase
             }
             catch (Exception e)
             {
-                App.GetService<MainViewModel>().Error = e;
+                // TODO: Log this?
             }
         });
     }

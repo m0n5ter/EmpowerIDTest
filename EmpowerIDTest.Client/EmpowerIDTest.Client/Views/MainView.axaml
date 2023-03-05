@@ -6,6 +6,7 @@
     xmlns:viewModels="clr-namespace:EmpowerIDTest.Client.ViewModels"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:shared="clr-namespace:EmpowerIDTest.Shared;assembly=EmpowerIDTest.Shared"
+    xmlns:dialogs="clr-namespace:EmpowerIDTest.Client.ViewModels.Dialogs"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="EmpowerIDTest.Client.Views.MainView">
     <Design.DataContext>
@@ -13,121 +14,236 @@
     </Design.DataContext>
 
     <Grid>
-        <Panel Margin="20" IsEnabled="{Binding Error, Converter={StaticResource IsNullConverter}}">
+        <Panel Margin="20" IsEnabled="{Binding Dialog, Converter={StaticResource IsNullConverter}}">
             <Grid RowDefinitions="Auto,Auto,*,Auto" DataContext="{Binding EmployeeList}">
-                <TextBlock FontWeight="Bold" FontSize="24" Foreground="{StaticResource SystemAccentColor}">Employees</TextBlock>
+                <TextBlock Classes="h1">Employees</TextBlock>
 
-                <Grid Grid.Row="1" ColumnDefinitions="Auto,*" Margin="0,10,0,0">
+                <Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto" Margin="0,10,0,0">
                     <TextBlock VerticalAlignment="Center">Filter</TextBlock>
                     <TextBox Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center" Text="{Binding FilterStr}"/>
 
                     <Button Grid.Column="1" HorizontalAlignment="Right" Background="Transparent" Padding="4" Margin="0,0,4,0" Command="{Binding ClearFilterCommand}">
                         <avalonia:MaterialIcon Kind="CloseCircle"/>
                     </Button>
-                </Grid>
+
+                    <Button Grid.Column="2" Padding="6" Margin="10,0,0,0" Command="{Binding RefreshCommand}">
+                        <avalonia:MaterialIcon Kind="Refresh"/>
+                    </Button>
+
+				</Grid>
 
                 <Grid Grid.Row="2">
-					<DataGrid x:Name="DataGrid" Sorting="OnDataGridSorting" IsEnabled="{Binding !IsLoading}" Margin="0,10,0,0" Items="{Binding Employees}" AutoGenerateColumns="False" IsReadOnly="True" BorderThickness="1" BorderBrush="{StaticResource ButtonBorderBrush}" GridLinesVisibility="All">
-						<DataGrid.Styles>
-							<Style Selector="TextBlock">
-								<Setter Property="VerticalAlignment" Value="Center"/>
-								<Setter Property="Margin" Value="10,0"/>
-								<Setter Property="FontSize" Value="12"/>
-							</Style>
-						</DataGrid.Styles>
+					<Border BorderThickness="1" BorderBrush="#80808080" Margin="0,10,0,0">
+						<DataGrid x:Name="DataGrid" Sorting="OnDataGridSorting" IsEnabled="{Binding !IsLoading}" Items="{Binding Employees}" 
+                                  AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="All" SelectedItem="{Binding SelectedEmployee}">
+							<DataGrid.Styles>
+								<Style Selector="TextBlock">
+									<Setter Property="VerticalAlignment" Value="Center"/>
+									<Setter Property="Margin" Value="10,0"/>
+									<Setter Property="FontSize" Value="12"/>
+								</Style>
+							</DataGrid.Styles>
 
-						<DataGrid.Columns>
-							<DataGridTemplateColumn SortMemberPath="Name" Header="Name" Width="*">
-								<DataGridTemplateColumn.CellTemplate>
-									<DataTemplate DataType="shared:Employee">
-										<TextBlock Text="{Binding Name}" FontWeight="Bold"/>
-									</DataTemplate>
-								</DataGridTemplateColumn.CellTemplate>
-							</DataGridTemplateColumn>
+							<DataGrid.Columns>
+								<DataGridTemplateColumn SortMemberPath="Name" Header="Name" Width="*">
+									<DataGridTemplateColumn.CellTemplate>
+										<DataTemplate DataType="shared:Employee">
+											<TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+										</DataTemplate>
+									</DataGridTemplateColumn.CellTemplate>
+								</DataGridTemplateColumn>
 
-							<DataGridTemplateColumn SortMemberPath="Department" Header="Department" Width="*">
-								<DataGridTemplateColumn.CellTemplate>
-									<DataTemplate DataType="shared:Employee">
-										<TextBlock Text="{Binding Department}"/>
-									</DataTemplate>
-								</DataGridTemplateColumn.CellTemplate>
-							</DataGridTemplateColumn>
+								<DataGridTemplateColumn SortMemberPath="Department" Header="Department" Width="*">
+									<DataGridTemplateColumn.CellTemplate>
+										<DataTemplate DataType="shared:Employee">
+											<TextBlock Text="{Binding Department}"/>
+										</DataTemplate>
+									</DataGridTemplateColumn.CellTemplate>
+								</DataGridTemplateColumn>
 
-							<DataGridTemplateColumn SortMemberPath="DOB" Header="DOB" Width="Auto">
-								<DataGridTemplateColumn.CellTemplate>
-									<DataTemplate DataType="shared:Employee">
-										<TextBlock Text="{Binding DOB}"/>
-									</DataTemplate>
-								</DataGridTemplateColumn.CellTemplate>
-							</DataGridTemplateColumn>
+								<DataGridTemplateColumn SortMemberPath="DOB" Header="DOB" Width="Auto">
+									<DataGridTemplateColumn.CellTemplate>
+										<DataTemplate DataType="shared:Employee">
+											<TextBlock Text="{Binding DOB}"/>
+										</DataTemplate>
+									</DataGridTemplateColumn.CellTemplate>
+								</DataGridTemplateColumn>
 
 
-							<DataGridTemplateColumn SortMemberPath="Email" Header="Email" Width="*">
-								<DataGridTemplateColumn.CellTemplate>
-									<DataTemplate DataType="shared:Employee">
-										<TextBlock Text="{Binding Email}"/>
-									</DataTemplate>
-								</DataGridTemplateColumn.CellTemplate>
-							</DataGridTemplateColumn>
+								<DataGridTemplateColumn SortMemberPath="Email" Header="Email" Width="*">
+									<DataGridTemplateColumn.CellTemplate>
+										<DataTemplate DataType="shared:Employee">
+											<TextBlock Text="{Binding Email}"/>
+										</DataTemplate>
+									</DataGridTemplateColumn.CellTemplate>
+								</DataGridTemplateColumn>
 
-							<DataGridTemplateColumn SortMemberPath="Phone" Header="Phone" Width="Auto">
-								<DataGridTemplateColumn.CellTemplate>
-									<DataTemplate DataType="shared:Employee">
-										<TextBlock Text="{Binding Phone}"/>
-									</DataTemplate>
-								</DataGridTemplateColumn.CellTemplate>
-							</DataGridTemplateColumn>
+								<DataGridTemplateColumn SortMemberPath="Phone" Header="Phone" Width="Auto">
+									<DataGridTemplateColumn.CellTemplate>
+										<DataTemplate DataType="shared:Employee">
+											<TextBlock Text="{Binding Phone}"/>
+										</DataTemplate>
+									</DataGridTemplateColumn.CellTemplate>
+								</DataGridTemplateColumn>
 
-							<DataGridTemplateColumn CanUserSort="False"  Width="Auto">
-								<DataGridTemplateColumn.CellTemplate>
-									<DataTemplate DataType="shared:Employee">
-										<StackPanel Spacing="5" Orientation="Horizontal" Margin="10,0" VerticalAlignment="Center">
-											<StackPanel.Styles>
-												<Style Selector="Button">
-													<Setter Property="VerticalAlignment" Value="Center"/>
-													<Setter Property="Padding" Value="4"/>
-												</Style>
-											</StackPanel.Styles>
+								<DataGridTemplateColumn CanUserSort="False"  Width="Auto">
+									<DataGridTemplateColumn.CellTemplate>
+										<DataTemplate DataType="shared:Employee">
+											<StackPanel Spacing="5" Orientation="Horizontal" Margin="10,0" VerticalAlignment="Center">
+												<StackPanel.Styles>
+													<Style Selector="Button">
+														<Setter Property="VerticalAlignment" Value="Center"/>
+														<Setter Property="Padding" Value="4"/>
+													</Style>
+												</StackPanel.Styles>
 
-											<Button>
-												<avalonia:MaterialIcon Kind="Edit"/>
-											</Button>
-											<Button Command="{Binding Path=#DataGrid.DataContext.DeleteEmployeeCommand, FallbackValue={x:Null}}" CommandParameter="{Binding}">
-												<avalonia:MaterialIcon Kind="CloseCircle" Foreground="Red"/>
-											</Button>
-										</StackPanel>
-									</DataTemplate>
-								</DataGridTemplateColumn.CellTemplate>
-							</DataGridTemplateColumn>
-						</DataGrid.Columns>
-					</DataGrid>
+												<Button>
+													<avalonia:MaterialIcon Kind="Edit"/>
+												</Button>
+												<Button Command="{Binding Path=#DataGrid.DataContext.DeleteEmployeeCommand, FallbackValue={x:Null}}" CommandParameter="{Binding}">
+													<avalonia:MaterialIcon Kind="CloseCircle" Foreground="Red"/>
+												</Button>
+											</StackPanel>
+										</DataTemplate>
+									</DataGridTemplateColumn.CellTemplate>
+								</DataGridTemplateColumn>
+							</DataGrid.Columns>
+						</DataGrid>
+					</Border>
 
-					<Border Background="#80000000" IsVisible="{Binding IsLoading}">
-						<ProgressBar IsIndeterminate="True" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="3"/>
-                    </Border>
+					<ProgressBar IsIndeterminate="True" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="2" IsVisible="{Binding IsLoading}"/>
+				</Grid>
+
+				<Grid Grid.Row="3" ColumnDefinitions="*,Auto,Auto,Auto" Margin="0,10,0,0">
+					<TextBlock MaxLines="2" VerticalAlignment="2" Text="{Binding Error.Message, FallbackValue={x:Null}}" TextWrapping="Wrap" Foreground="Red"/>
+
+                    <StackPanel Grid.Column="1" IsVisible="{Binding CurrentPage, Converter={StaticResource IsNotNullConverter}}" VerticalAlignment="Center">
+                        <TextBlock FontSize="10">
+                            <Run Text="{Binding Employees.Count, Mode=OneWay}"/> of <Run Text="{Binding CurrentPage.FilteredCount, Mode=OneWay, FallbackValue=''}"/>
+                        </TextBlock>
+                        <TextBlock FontSize="10">
+                            (<Run Text="{Binding CurrentPage.FullCount, Mode=OneWay, FallbackValue=''}"/> total)
+						</TextBlock>
+                    </StackPanel>
+
+                    <Button Grid.Column="2" Command="{Binding LoadMoreCommand}" Margin="10,0,0,0" VerticalAlignment="Center">
+                        <avalonia:MaterialIcon Kind="DownloadMultiple"/>
+                    </Button>
+
+					<StackPanel Grid.Column="3" Margin="20,0,0,0" VerticalAlignment="Center" Orientation="Horizontal">
+                        <Button Command="{Binding AddEmployeeCommand}">
+                            <StackPanel Orientation="Horizontal" Spacing="5">
+                                <avalonia:MaterialIcon Kind="AddCircle" Foreground="DarkGreen" VerticalAlignment="Center"/>
+                                <TextBlock VerticalAlignment="Center">New Employee</TextBlock>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
 				</Grid>
 			</Grid>
 		</Panel>
 
 		<Border 
             Background="#60000000"
-            IsVisible="{Binding Error, Converter={StaticResource IsNotNullConverter}}">
-            <Border 
-                MinWidth="300"
-                Padding="20"
-                Background="{StaticResource SystemChromeLowColor}"
-                CornerRadius="4" 
-                BorderThickness="2" 
-                BorderBrush="#40FFFF00" 
-                VerticalAlignment="Center"
-                HorizontalAlignment="Center"
-                BoxShadow="5 5 10 2 #80000000">
-                
-                <Grid RowDefinitions="Auto,Auto">
-                    <TextBlock Text="{Binding Error.Message, FallbackValue=''}" TextWrapping="Wrap" MaxLines="5"/>
-                    <Button Grid.Row="1" Margin="0,10,0,0" HorizontalAlignment="Right" Command="{Binding ClearErrorCommand}">Close</Button>
-                </Grid>
-            </Border>
+            IsVisible="{Binding Dialog, Converter={StaticResource IsNotNullConverter}}">
+
+            <ContentControl Content="{Binding Dialog}" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <ContentControl.DataTemplates>
+                    <DataTemplate DataType="dialogs:EmployeeDialogViewModel">
+                        <Border
+                            MinWidth="500"
+                            Padding="25,15"
+                            Margin="20"
+                            Background="{StaticResource SystemChromeLowColor}"
+                            CornerRadius="4"
+                            BorderThickness="2"
+                            BorderBrush="#40808000"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                            BoxShadow="0 0 10 5 Black">
+
+							<StackPanel Spacing="10">
+                                <TextBlock Classes="h1" Text="{Binding Title}"/>
+
+								<Grid Margin="0,10,0,0" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
+                                    <Grid.Styles>
+										<Style Selector="TextBlock">
+											<Setter Property="VerticalAlignment" Value="Center"/>
+                                            <Setter Property="Margin" Value="0,0,0,5"/>
+                                        </Style>
+                                        
+                                        <Style Selector="TextBox">
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                            <Setter Property="Margin" Value="10,0,0,5"/>
+                                        </Style>
+                                    </Grid.Styles>
+
+                                    <TextBlock Grid.Row="0" Grid.Column="0">Name</TextBlock>
+                                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name}"/>
+                                    <TextBlock Grid.Row="1" Grid.Column="0">Password</TextBlock>
+                                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Password}" PasswordChar="•"/>
+									<TextBlock Grid.Row="2" Grid.Column="0">Email</TextBlock>
+									<TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Email}"/>
+									<TextBlock Grid.Row="3" Grid.Column="0">Phone</TextBlock>
+									<TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Phone}"/>
+									<TextBlock Grid.Row="4" Grid.Column="0">DOB</TextBlock>
+									<CalendarDatePicker Grid.Row="4" Grid.Column="1" SelectedDate="{Binding DOB}" Margin="10,0,0,5" HorizontalAlignment="Stretch"/>
+									<TextBlock Grid.Row="5" Grid.Column="0">Department</TextBlock>
+                                    <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Department}"/>
+								</Grid>
+
+								<Grid ColumnDefinitions="*,Auto">
+									<TextBlock Text="{Binding Error}" MaxLines="2" TextWrapping="Wrap" Foreground="Red"/>
+
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="10,0,0,0" Spacing="5">
+                                        <StackPanel.Styles>
+                                            <Style Selector="Button">
+                                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                <Setter Property="MinWidth" Value="80"/>
+                                            </Style>
+                                        </StackPanel.Styles>
+
+                                        <Button IsDefault="True" Command="{Binding OkCommand}">OK</Button>
+                                        <Button IsCancel="True" Command="{Binding CancelCommand}">Cancel</Button>
+									</StackPanel>
+                                </Grid>
+							</StackPanel>
+                        </Border>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="dialogs:ConfirmationDialogViewModel">
+                        <Border
+                            MinWidth="300"
+                            Padding="25,15"
+                            Margin="20"
+                            Background="{StaticResource SystemChromeLowColor}"
+                            CornerRadius="4"
+                            BorderThickness="2"
+                            BorderBrush="#40808000"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                            BoxShadow="0 0 10 5 Black">
+
+							<StackPanel Spacing="10">
+                                <TextBlock Classes="h1" Text="Confirmation"/>
+
+								<TextBlock MaxLines="5" TextWrapping="Wrap" Text="{Binding Message}" Margin="0,10,0,0"/>
+								
+                                <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Spacing="5" HorizontalAlignment="Right">
+                                    <StackPanel.Styles>
+                                        <Style Selector="Button">
+                                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                            <Setter Property="MinWidth" Value="80"/>
+                                        </Style>
+                                    </StackPanel.Styles>
+
+                                    <Button IsDefault="True" Command="{Binding OkCommand}">OK</Button>
+                                    <Button IsCancel="True" Command="{Binding CancelCommand}">Cancel</Button>
+								</StackPanel>
+							</StackPanel>
+                        </Border>
+                    </DataTemplate>
+				</ContentControl.DataTemplates>
+            </ContentControl>
         </Border>
     </Grid>
 </UserControl>

@@ -28,4 +28,10 @@
   <ItemGroup>
     <ProjectReference Include="..\..\EmpowerIDTest.Shared\EmpowerIDTest.Shared.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Mono.Android">
+      <HintPath>..\..\..\..\..\Program Files\dotnet\packs\Microsoft.Android.Ref.33\33.0.26\ref\net7.0\Mono.Android.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>

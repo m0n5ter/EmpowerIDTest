@@ -33,5 +33,11 @@
 
         <StyleInclude Source="avares://Material.Icons.Avalonia/App.xaml"/>
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
+
+		<Style Selector="TextBlock.h1">
+			<Setter Property="FontWeight" Value="Bold"/>
+			<Setter Property="FontSize" Value="24"/>
+			<Setter Property="Foreground" Value="{StaticResource SystemAccentColor}"/>
+        </Style>
     </Application.Styles>
 </Application>
