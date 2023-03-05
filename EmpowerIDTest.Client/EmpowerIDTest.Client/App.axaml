@@ -1,0 +1,37 @@
+<Application
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    xmlns:utils="clr-namespace:EmpowerIDTest.Client.Utils"
+    x:Class="EmpowerIDTest.Client.App">
+
+    <Application.Resources>
+        <system:Boolean x:Key="TrueValue">True</system:Boolean>
+        <system:Boolean x:Key="FalseValue">False</system:Boolean>
+
+		<utils:IsTrueOrFalseConverter x:Key="HiddenWhenTrueConverter" WhenEqual="Hidden" WhenNotEqual="Visible" />
+        <utils:IsTrueOrFalseConverter x:Key="CollapsedWhenTrueConverter" WhenEqual="Collapsed" WhenNotEqual="Visible" />
+		<utils:IsTrueOrFalseConverter x:Key="HiddenWhenFalseConverter" WhenEqual="Visible" WhenNotEqual="Hidden" />
+		<utils:IsTrueOrFalseConverter x:Key="CollapsedWhenFalseConverter" WhenEqual="Visible" WhenNotEqual="Collapsed" />
+
+		<utils:IsNullConverter x:Key="HiddenWhenNullConverter" WhenEqual="Hidden" WhenNotEqual="Visible" />
+		<utils:IsNullConverter x:Key="CollapsedWhenNullConverter" WhenEqual="Collapsed" WhenNotEqual="Visible" />
+		<utils:IsNullConverter x:Key="HiddenWhenNotNullConverter" WhenEqual="Visible" WhenNotEqual="Hidden" />
+		<utils:IsNullConverter x:Key="CollapsedWhenNotNullConverter" WhenEqual="Visible" WhenNotEqual="Collapsed" />
+
+		<utils:IsEqualConverter x:Key="HiddenWhenEqualsConverter" WhenEqual="Hidden" WhenNotEqual="Visible" />
+		<utils:IsEqualConverter x:Key="CollapsedWhenEqualsConverter" WhenEqual="Collapsed" WhenNotEqual="Visible" />
+		<utils:IsEqualConverter x:Key="HiddenWhenNotEqualsConverter" WhenEqual="Visible" WhenNotEqual="Hidden" />
+		<utils:IsEqualConverter x:Key="CollapsedWhenNotEqualsConverter" WhenEqual="Visible" WhenNotEqual="Collapsed" />
+
+		<utils:IsNullConverter x:Key="IsNullConverter" />
+		<utils:IsNullConverter x:Key="IsNotNullConverter" WhenEqual="{StaticResource FalseValue}" WhenNotEqual="{StaticResource TrueValue}" />
+	</Application.Resources>
+
+    <Application.Styles>
+        <FluentTheme Mode="Dark"/>
+
+        <StyleInclude Source="avares://Material.Icons.Avalonia/App.xaml"/>
+        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
+    </Application.Styles>
+</Application>
