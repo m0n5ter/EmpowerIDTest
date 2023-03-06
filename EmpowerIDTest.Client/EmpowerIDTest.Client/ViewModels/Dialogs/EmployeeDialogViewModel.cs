@@ -6,8 +6,6 @@ namespace EmpowerIDTest.Client.ViewModels.Dialogs;
 
 public class EmployeeDialogViewModel : DialogViewModelBase
 {
-    public Employee Employee { get; }
-
     private string _name;
     private string _password;
     private string? _email;
@@ -95,14 +93,14 @@ public class EmployeeDialogViewModel : DialogViewModelBase
     public EmployeeDialogViewModel(Employee? employee)
     {
         Title = employee == null ? "New Employee": "Edit Employee";
-        Employee = employee ?? new Employee();
+        var employee1 = employee ?? new Employee();
         
-        _name = Employee.Name ?? "";
-        _password = Employee.Password ?? "";
-        _email = Employee.Email ?? "";
-        _phone = Employee.Phone ?? "";
-        _dob = Employee.DOB ?? DateTime.Today.AddYears(-18);
-        _department = Employee.Department ?? "";
+        _name = employee1.Name ?? "";
+        _password = employee1.Password ?? "";
+        _email = employee1.Email ?? "";
+        _phone = employee1.Phone ?? "";
+        _dob = employee1.DOB ?? DateTime.Today.AddYears(-18);
+        _department = employee1.Department ?? "";
     }
 
     public string Title { get; }
@@ -124,17 +122,5 @@ public class EmployeeDialogViewModel : DialogViewModelBase
             if (!string.IsNullOrEmpty(Department) && Department.Length > 50) return "Department name is too long";
             return null;
         }
-    }
-
-    protected override void Ok()
-    {
-        Employee.Name = Name;
-        Employee.Password = Password;
-        Employee.Email = Email;
-        Employee.Phone = Phone;
-        Employee.DOB = DOB;
-        Employee.Department = Department;
-
-        base.Ok();
     }
 }

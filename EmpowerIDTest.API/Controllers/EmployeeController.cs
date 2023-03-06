@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Globalization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using EmpowerIDTest.API.Model;
 using EmpowerIDTest.Shared;
@@ -34,17 +35,23 @@ public class EmployeeController : ControllerBase
                 users = users.Where(_ =>
                     (_.Email != null && _.Email.Contains(searchTerm))
                     || (_.Name.Contains(searchTerm))
-                    || (_.Phone != null && _.Phone.Contains(searchTerm)));
+                    || (_.Phone != null && _.Phone.Contains(searchTerm))
+                    || (_.DOB != null && _.DOB.Value.ToString(CultureInfo.InvariantCulture).Contains(searchTerm))
+                    || (_.Department != null && _.Department.Contains(searchTerm)));
             }
 
             users = sort switch
             {
-                "a_name" => users.OrderBy(_ => _.Name),
-                "d_name" => users.OrderByDescending(_ => _.Name),
-                "a_email" => users.OrderBy(_ => _.Email),
-                "d_email" => users.OrderByDescending(_ => _.Email),
-                "a_phone" => users.OrderBy(_ => _.Phone),
-                "d_phone" => users.OrderByDescending(_ => _.Phone),
+                "a_Name" => users.OrderBy(_ => _.Name),
+                "d_Name" => users.OrderByDescending(_ => _.Name),
+                "a_Email" => users.OrderBy(_ => _.Email),
+                "d_Email" => users.OrderByDescending(_ => _.Email),
+                "a_Phone" => users.OrderBy(_ => _.Phone),
+                "d_Phone" => users.OrderByDescending(_ => _.Phone),
+                "a_DOB" => users.OrderBy(_ => _.DOB),
+                "d_DOB" => users.OrderByDescending(_ => _.DOB),
+                "a_Department" => users.OrderBy(_ => _.Department),
+                "d_Department" => users.OrderByDescending(_ => _.Department),
                 _ => users
             };
 

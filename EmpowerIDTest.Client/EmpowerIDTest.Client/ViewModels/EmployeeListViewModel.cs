@@ -1,6 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Collections;
 using Avalonia.Threading;
@@ -22,11 +22,38 @@ internal partial class EmployeeListViewModel : ViewModelBase
     private string? _filterStr;
     private bool _isLoading;
     private Employee? _selectedEmployee;
+    private string _sort = "a_name";
 
     public EmployeeListViewModel(EmployeeServiceClient client, SettingsViewModel settings)
     {
         _client = client;
         _settings = settings;
+
+        View = new DataGridCollectionView(Employees)
+        {
+            SortDescriptions =
+            {
+                DataGridSortDescription.FromPath(nameof(Employee.Name))
+            }
+        };
+
+        View.SortDescriptions.CollectionChanged += (sender, args) =>
+        {
+            if ((sender as DataGridSortDescriptionCollection)?.FirstOrDefault() is { } sortDescription)
+                Sort = $"{(sortDescription.Direction == ListSortDirection.Ascending ? "a" : "d")}_{sortDescription.PropertyPath}";
+        };
+    }
+
+    public DataGridCollectionView View { get; }
+
+    public string Sort
+    {
+        get => _sort;
+        set
+        {
+            if (SetProperty(ref _sort, value))
+                ScheduleLoad();
+        }
     }
 
     public Exception? Error
@@ -89,34 +116,10 @@ internal partial class EmployeeListViewModel : ViewModelBase
     [RelayCommand(CanExecute = nameof(CanLoadMore))]
     private async Task LoadMore()
     {
-        IsLoading = true;
-        Error = null;
-
-        try
-        {
-            var employees = await _client.List(new EmployeeSearchRequest
-            {
-                SearchTerm = FilterStr,
-                PageSize = _settings.ItemsPerPage,
-                PageNumber = CurrentPage!.PageNumber + 1
-            });
-
-            await Dispatcher.UIThread.InvokeAsync(() =>
-            {
-                CurrentPage = employees;
-                Employees.AddRange(employees);
-            });
-        }
-        catch (Exception exception)
-        {
-            Error = exception;
-        }
-        finally
-        {
-            IsLoading = false;
-        }
+        if (CurrentPage != null)
+            await Load(CurrentPage.PageNumber + 1);
     }
-
+    
     public bool CanLoadMore => CurrentPage != null && CurrentPage.FilteredCount > Employees.Count;
 
     [RelayCommand]
@@ -130,9 +133,19 @@ internal partial class EmployeeListViewModel : ViewModelBase
 
             if (await App.GetService<MainViewModel>().ShowDialog(dialog))
             {
-                await _client.Create(dialog.Employee);
-                await Dispatcher.UIThread.InvokeAsync(() => Employees.Add(dialog.Employee));
-                SelectedEmployee = dialog.Employee;
+                var newEmployee = new Employee
+                {
+                    Name = dialog.Name,
+                    Password = dialog.Password,
+                    Email = dialog.Email,
+                    Phone = dialog.Phone,
+                    DOB = dialog.DOB,
+                    Department = dialog.Department,
+                };
+
+                await _client.Create(newEmployee);
+                await Dispatcher.UIThread.InvokeAsync(() => Employees.Add(newEmployee));
+                SelectedEmployee = newEmployee;
             }
         }
         catch (Exception exception)
@@ -140,7 +153,36 @@ internal partial class EmployeeListViewModel : ViewModelBase
             Error = exception;
         }
     }
-    
+
+    [RelayCommand]
+    private async Task EditEmployee(Employee employee)
+    {
+        Error = null;
+
+        try
+        {
+            var dialog = new EmployeeDialogViewModel(employee);
+
+            if (await App.GetService<MainViewModel>().ShowDialog(dialog))
+            {
+                employee.Name = dialog.Name;
+                employee.Password = dialog.Password;
+                employee.Email = dialog.Email;
+                employee.Phone = dialog.Phone;
+                employee.DOB = dialog.DOB;
+                employee.Department = dialog.Department;
+
+                await _client.Update(employee);
+                await Dispatcher.UIThread.InvokeAsync(() => View.Refresh());
+            }
+        }
+        catch (Exception exception)
+        {
+            Error = exception;
+        }
+    }
+
+
     [RelayCommand]
     private async Task DeleteEmployee(Employee employee)
     {
@@ -169,10 +211,10 @@ internal partial class EmployeeListViewModel : ViewModelBase
     [RelayCommand]
     private void ScheduleLoad()
     {
-        _loadThrottler.Next(200, Load);
+        _loadThrottler.Next(200, (_, _) => Load(1));
     }
 
-    private async Task Load(string? _, CancellationToken ct)
+    private async Task Load(int pageNumber)
     {
         IsLoading = true;
         Error = null;
@@ -183,13 +225,15 @@ internal partial class EmployeeListViewModel : ViewModelBase
             var employees = await _client.List(new EmployeeSearchRequest
             {
                 SearchTerm = FilterStr,
-                PageSize = _settings.ItemsPerPage
+                Sort = Sort,
+                PageSize = _settings.ItemsPerPage,
+                PageNumber = pageNumber
             });
 
             await Dispatcher.UIThread.InvokeAsync(() =>
             {
                 CurrentPage = employees;
-                Employees.Clear();
+                if (pageNumber == 1) Employees.Clear();
                 Employees.AddRange(employees);
                 SelectedEmployee = employees.FirstOrDefault(_ => _.Id == selectedId);
             });

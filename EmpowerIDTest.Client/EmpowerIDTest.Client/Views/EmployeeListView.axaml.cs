@@ -2,9 +2,9 @@ using Avalonia.Controls;
 
 namespace EmpowerIDTest.Client.Views;
 
-public partial class MainView : UserControl
+public partial class EmployeeListView : UserControl
 {
-    public MainView()
+    public EmployeeListView()
     {
         InitializeComponent();
     }

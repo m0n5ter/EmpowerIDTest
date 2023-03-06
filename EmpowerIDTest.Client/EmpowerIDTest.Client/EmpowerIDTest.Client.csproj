@@ -34,4 +34,10 @@
       <HintPath>..\..\..\..\..\Program Files\dotnet\packs\Microsoft.Android.Ref.33\33.0.26\ref\net7.0\Mono.Android.dll</HintPath>
     </Reference>
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\EmployeeListView.axaml.cs">
+      <DependentUpon>EmployeeListView.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
 </Project>
