@@ -41,7 +41,7 @@ internal class SettingsViewModel : ViewModelBase
 
         var settings = new SettingsViewModel
         {
-            _serviceAddress = jObject[nameof(ServiceAddress)]?.Value<string>() ?? "https://localhost:7124/api/",
+            _serviceAddress = jObject[nameof(ServiceAddress)]?.Value<string>() ?? "https://185.51.62.152:8087/api/",
             _itemsPerPage = jObject[nameof(ItemsPerPage)]?.Value<int>() ?? 50
         };
 

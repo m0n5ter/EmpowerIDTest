@@ -10,7 +10,11 @@ namespace EmpowerIDTest.Client.Mvc;
 
 internal class ProblemDetailsHttpMessageHandler : DelegatingHandler
 {
-    public ProblemDetailsHttpMessageHandler() : base(new HttpClientHandler())
+    public ProblemDetailsHttpMessageHandler() : base(new HttpClientHandler
+    {
+        // Disables certificate validation, remove in production
+        ServerCertificateCustomValidationCallback = (message, certificate2, arg3, arg4) => true
+    })
     {
     }
 

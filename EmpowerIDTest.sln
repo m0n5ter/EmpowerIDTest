@@ -3,21 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33414.496
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmpowerIDTest.Client", "EmpowerIDTest.Client\EmpowerIDTest.Client\EmpowerIDTest.Client.csproj", "{F2155EF1-C478-4145-B239-E49FA11A4B0C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmpowerIDTest.Client", "EmpowerIDTest.Client\EmpowerIDTest.Client\EmpowerIDTest.Client.csproj", "{F2155EF1-C478-4145-B239-E49FA11A4B0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmpowerIDTest.Client.Android", "EmpowerIDTest.Client\EmpowerIDTest.Client.Android\EmpowerIDTest.Client.Android.csproj", "{02A95132-3BC6-48CE-A952-2638C8DCBACC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmpowerIDTest.Client.Android", "EmpowerIDTest.Client\EmpowerIDTest.Client.Android\EmpowerIDTest.Client.Android.csproj", "{02A95132-3BC6-48CE-A952-2638C8DCBACC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmpowerIDTest.Client.Desktop", "EmpowerIDTest.Client\EmpowerIDTest.Client.Desktop\EmpowerIDTest.Client.Desktop.csproj", "{530C0F5D-0DE5-4743-A49C-DE8328D6C865}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmpowerIDTest.Client.Desktop", "EmpowerIDTest.Client\EmpowerIDTest.Client.Desktop\EmpowerIDTest.Client.Desktop.csproj", "{530C0F5D-0DE5-4743-A49C-DE8328D6C865}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmpowerIDTest.Client.iOS", "EmpowerIDTest.Client\EmpowerIDTest.Client.iOS\EmpowerIDTest.Client.iOS.csproj", "{4CE4C826-24A5-42EF-9AD9-D4298B832115}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmpowerIDTest.Client.iOS", "EmpowerIDTest.Client\EmpowerIDTest.Client.iOS\EmpowerIDTest.Client.iOS.csproj", "{4CE4C826-24A5-42EF-9AD9-D4298B832115}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmpowerIDTest.Client.Web", "EmpowerIDTest.Client\EmpowerIDTest.Client.Web\EmpowerIDTest.Client.Web.csproj", "{657208E2-76CE-4AB6-8B9E-B451C1E8C009}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmpowerIDTest.Client.Web", "EmpowerIDTest.Client\EmpowerIDTest.Client.Web\EmpowerIDTest.Client.Web.csproj", "{657208E2-76CE-4AB6-8B9E-B451C1E8C009}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmpowerIDTest.Shared", "EmpowerIDTest.Shared\EmpowerIDTest.Shared.csproj", "{5831B4FB-EFE5-42B6-9A63-58A5D9E71710}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmpowerIDTest.Shared", "EmpowerIDTest.Shared\EmpowerIDTest.Shared.csproj", "{5831B4FB-EFE5-42B6-9A63-58A5D9E71710}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmpowerIDTest.API", "EmpowerIDTest.API\EmpowerIDTest.API.csproj", "{85556EBF-A423-4056-96A0-8289816BC344}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmpowerIDTest.API", "EmpowerIDTest.API\EmpowerIDTest.API.csproj", "{85556EBF-A423-4056-96A0-8289816BC344}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{528338BD-3613-4E6B-86DD-83ABB108A5AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmpowerID.API.Tests", "EmpowerID.API.Tests\EmpowerID.API.Tests.csproj", "{1220340C-633D-4586-8140-CCB2616936F8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{EF087E13-1A75-48A6-B01B-CFF0A410905F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +61,10 @@ Global
 		{85556EBF-A423-4056-96A0-8289816BC344}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{85556EBF-A423-4056-96A0-8289816BC344}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{85556EBF-A423-4056-96A0-8289816BC344}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1220340C-633D-4586-8140-CCB2616936F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1220340C-633D-4586-8140-CCB2616936F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1220340C-633D-4586-8140-CCB2616936F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1220340C-633D-4586-8140-CCB2616936F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +75,7 @@ Global
 		{530C0F5D-0DE5-4743-A49C-DE8328D6C865} = {528338BD-3613-4E6B-86DD-83ABB108A5AF}
 		{4CE4C826-24A5-42EF-9AD9-D4298B832115} = {528338BD-3613-4E6B-86DD-83ABB108A5AF}
 		{657208E2-76CE-4AB6-8B9E-B451C1E8C009} = {528338BD-3613-4E6B-86DD-83ABB108A5AF}
+		{1220340C-633D-4586-8140-CCB2616936F8} = {EF087E13-1A75-48A6-B01B-CFF0A410905F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A7E6FA9E-2E38-43F3-884C-08962F6738F6}

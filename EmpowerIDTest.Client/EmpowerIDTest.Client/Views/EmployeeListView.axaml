@@ -6,6 +6,7 @@
     xmlns:viewModels="clr-namespace:EmpowerIDTest.Client.ViewModels"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:shared="clr-namespace:EmpowerIDTest.Shared;assembly=EmpowerIDTest.Shared"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="EmpowerIDTest.Client.Views.EmployeeListView">
     <Design.DataContext>
@@ -17,13 +18,13 @@
 
 		<Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto" Margin="0,10,0,0">
 			<TextBlock VerticalAlignment="Center">Filter</TextBlock>
-			<TextBox Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center" Text="{Binding FilterStr}"/>
+			<TextBox Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center" Text="{Binding FilterStr}" Watermark="Enter text to search for"/>
 
-			<Button Grid.Column="1" HorizontalAlignment="Right" Background="Transparent" Padding="4" Margin="0,0,4,0" Command="{Binding ClearFilterCommand}">
+			<Button Grid.Column="1" HorizontalAlignment="Right" Background="Transparent" Padding="4" Margin="0,0,4,0" Command="{Binding ClearFilterCommand}" ToolTip.Tip="Clear filter">
 				<avalonia:MaterialIcon Kind="CloseCircle"/>
 			</Button>
 
-			<Button Grid.Column="2" Padding="6" Margin="10,0,0,0" Command="{Binding RefreshCommand}">
+			<Button Grid.Column="2" Padding="6" Margin="10,0,0,0" Command="{Binding RefreshCommand}" ToolTip.Tip="Reload">
 				<avalonia:MaterialIcon Kind="Refresh"/>
 			</Button>
         </Grid>
@@ -35,9 +36,38 @@
 					<DataGrid.Styles>
 						<Style Selector="TextBlock">
 							<Setter Property="VerticalAlignment" Value="Center"/>
-							<Setter Property="Margin" Value="10,0"/>
-							<Setter Property="FontSize" Value="12"/>
-						</Style>
+							<Setter Property="Margin">
+                                <Setter.Value>
+                                    <OnPlatform>
+                                        <OnPlatform.Default>
+                                            <Thickness>10,0</Thickness>
+                                        </OnPlatform.Default>
+                                        <OnPlatform.Android>
+                                            <Thickness>4,0</Thickness>
+                                        </OnPlatform.Android>
+                                        <OnPlatform.iOS>
+											<Thickness>4,0</Thickness>
+                                        </OnPlatform.iOS>
+                                    </OnPlatform>
+                                </Setter.Value>
+                            </Setter>
+
+                            <Setter Property="FontSize">
+                                <Setter.Value>
+                                    <OnPlatform>
+                                        <OnPlatform.Default>
+											<system:Double>12</system:Double>
+                                        </OnPlatform.Default>
+                                        <OnPlatform.Android>
+											<system:Double>10</system:Double>
+                                        </OnPlatform.Android>
+                                        <OnPlatform.iOS>
+											<system:Double>10</system:Double>
+                                        </OnPlatform.iOS>
+                                    </OnPlatform>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
 					</DataGrid.Styles>
 
 					<DataGrid.Columns>
@@ -60,13 +90,12 @@
 						<DataGridTemplateColumn SortMemberPath="DOB" Header="DOB" Width="Auto">
 							<DataGridTemplateColumn.CellTemplate>
 								<DataTemplate DataType="shared:Employee">
-									<TextBlock Text="{Binding DOB}"/>
+									<TextBlock Text="{Binding DOB, StringFormat={}{0:d}}"/>
 								</DataTemplate>
 							</DataGridTemplateColumn.CellTemplate>
 						</DataGridTemplateColumn>
 
-
-						<DataGridTemplateColumn SortMemberPath="Email" Header="Email" Width="*">
+                        <DataGridTemplateColumn SortMemberPath="Email" Header="Email" Width="*">
 							<DataGridTemplateColumn.CellTemplate>
 								<DataTemplate DataType="shared:Employee">
 									<TextBlock Text="{Binding Email}"/>
@@ -93,10 +122,10 @@
 											</Style>
 										</StackPanel.Styles>
 
-                                        <Button Command="{Binding Path=#DataGrid.DataContext.EditEmployeeCommand, FallbackValue={x:Null}}" CommandParameter="{Binding}">
+                                        <Button Command="{Binding Path=#DataGrid.DataContext.EditEmployeeCommand, FallbackValue={x:Null}}" CommandParameter="{Binding}" ToolTip.Tip="Edit Employee">
 											<avalonia:MaterialIcon Kind="Edit"/>
 										</Button>
-										<Button Command="{Binding Path=#DataGrid.DataContext.DeleteEmployeeCommand, FallbackValue={x:Null}}" CommandParameter="{Binding}">
+										<Button Command="{Binding Path=#DataGrid.DataContext.DeleteEmployeeCommand, FallbackValue={x:Null}}" CommandParameter="{Binding}" ToolTip.Tip="Delete Employee">
 											<avalonia:MaterialIcon Kind="CloseCircle" Foreground="Red"/>
 										</Button>
 									</StackPanel>
@@ -115,21 +144,21 @@
 
 			<StackPanel Grid.Column="1" IsVisible="{Binding CurrentPage, Converter={StaticResource IsNotNullConverter}}" VerticalAlignment="Center">
 				<TextBlock FontSize="10">
-					<Run Text="{Binding Employees.Count, Mode=OneWay}"/> of <Run Text="{Binding CurrentPage.FilteredCount, Mode=OneWay, FallbackValue=''}"/>
+					Showing <Run Text="{Binding Employees.Count, Mode=OneWay}"/> of <Run Text="{Binding CurrentPage.FilteredCount, Mode=OneWay, FallbackValue=''}"/>
 				</TextBlock>
 				<TextBlock FontSize="10">
 					(<Run Text="{Binding CurrentPage.FullCount, Mode=OneWay, FallbackValue=''}"/> total)
 				</TextBlock>
 			</StackPanel>
 
-			<Button Grid.Column="2" Command="{Binding LoadMoreCommand}" Margin="10,0,0,0" VerticalAlignment="Center">
+			<Button Grid.Column="2" Command="{Binding LoadMoreCommand}" Margin="10,0,0,0" VerticalAlignment="Center" ToolTip.Tip="Load more">
 				<avalonia:MaterialIcon Kind="DownloadMultiple"/>
 			</Button>
 
 			<StackPanel Grid.Column="3" Margin="20,0,0,0" VerticalAlignment="Center" Orientation="Horizontal">
 				<Button Command="{Binding AddEmployeeCommand}">
 					<StackPanel Orientation="Horizontal" Spacing="5">
-						<avalonia:MaterialIcon Kind="AddCircle" Foreground="DarkGreen" VerticalAlignment="Center"/>
+						<avalonia:MaterialIcon Kind="AddCircle" Foreground="Green" VerticalAlignment="Center"/>
 						<TextBlock VerticalAlignment="Center">New Employee</TextBlock>
 					</StackPanel>
 				</Button>
