@@ -1,5 +1,14 @@
 # EmpowerIDTest
 
+Implementation notes
+
+- The API is temporarily hosted at https://185.51.62.152:8087/api/
+- Client part was tested on Windows/MacOS and Android
+- Android UI could use some improvements in terms of font sizes, layout etc
+- Unit tests are very basic, just to show the idea
+
+# The original task description
+
 ## Task: Employee Management System
 Build a web application that allows an organization to manage its employees. The application should have the following features:
 
